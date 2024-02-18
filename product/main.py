@@ -4,6 +4,7 @@ from schemas import *
 from database import Base, engine, SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import mode
+from typing import List
 import models
 
 app = FastAPI()
@@ -18,9 +19,11 @@ def get_db():
     finally:
         db.close()
 
+
 @app.delete('/product/{id}')
-def delete(id,db: Session = Depends(get_db)):
-    product = db.query(models.Product).filter(models.Product.id == id).delete(synchronize_session=False)
+def delete(id, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(
+        models.Product.id == id).delete(synchronize_session=False)
     db.commit()
     return {'Product Deleted'}
 
@@ -35,16 +38,17 @@ def update(id, request: Product, db: Session = Depends(get_db)):
     db.commit()
     return {'product update succesfully'}
 
+
 @app.get('/products')
 def products(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
 
-@app.get('/product')
+
+@app.get('/product/{id}', response_model=List[DisplayProduct])
 def product(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     return product
-
 
 
 @app.post('/products')
