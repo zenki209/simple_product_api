@@ -11,8 +11,9 @@ class Product(BaseModel):
 
 
 #There are some case you did not want the response return all of the data so we have to build a class for the dispaly
-class DisplayProduct(Product):
+class DisplayProduct(BaseModel):
     name: str
     description: str
+
     class Config:
-        orm_mode = True
+        from_attributes = True

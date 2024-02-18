@@ -45,7 +45,7 @@ def products(db: Session = Depends(get_db)):
     return products
 
 
-@app.get('/product/{id}', response_model=List[DisplayProduct])
+@app.get('/product/{id}', response_model=DisplayProduct)
 def product(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     return product
