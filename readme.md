@@ -11,5 +11,6 @@ cd env & source bin/activate
 #windows
 cd env & script\activate 
 
-Start the App (start the app with parameter --app-dir)
+Start the App (start the app with parameter --app-dir
+uvicorn.exe --app-dir .\product\ main:app --reload
 ```
