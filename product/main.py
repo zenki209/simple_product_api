@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,status
 from fastapi.params import Depends
 from schemas import *
 from database import Base, engine, SessionLocal
@@ -51,7 +51,7 @@ def product(id, db: Session = Depends(get_db)):
     return product
 
 
-@app.post('/products')
+@app.post('/products',status_code=status.HTTP_201_CREATED)
 def add(request: Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description, price=request.price)
