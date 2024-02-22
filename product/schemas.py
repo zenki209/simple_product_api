@@ -17,3 +17,9 @@ class DisplayProduct(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class Seller(BaseModel):
+    name: str
+    email: str
+    password: str

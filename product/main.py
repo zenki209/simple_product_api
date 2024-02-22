@@ -65,3 +65,13 @@ def add(request: Product, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_product)
     return request
+
+@app.post('/seller')
+def add_seller(request:Seller, db: Session = Depends(get_db)):
+    new_Seller = models.Seller(
+        username=request.name, email = request.email, password = request.password
+    )
+    db.add(new_Seller)
+    db.commit()
+    db.refresh(new_Seller)
+    return request
