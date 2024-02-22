@@ -1,4 +1,4 @@
-from fastapi import FastAPI,status
+from fastapi import FastAPI, status, Response, HTTPException
 from fastapi.params import Depends
 from schemas import *
 from database import Base, engine, SessionLocal
@@ -46,12 +46,16 @@ def products(db: Session = Depends(get_db)):
 
 
 @app.get('/product/{id}', response_model=DisplayProduct)
-def product(id, db: Session = Depends(get_db)):
+def product(id, response: Response, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
+    if not product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Cannot find object with idx')
+        return {'product not found'}
     return product
 
 
-@app.post('/products',status_code=status.HTTP_201_CREATED)
+@app.post('/products', status_code=status.HTTP_201_CREATED)
 def add(request: Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description, price=request.price)
