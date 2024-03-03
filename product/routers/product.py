@@ -6,9 +6,12 @@ from schemas import *
 from database import get_db
 from typing import List
 
-router = APIRouter()
+router = APIRouter(
+    tags=['product'],
+    prefix="/product"
+)
 
-@router.delete('/product/{id}', tags=['Product'])
+@router.delete('/{id}')
 def delete(id, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(
         models.Product.id == id).delete(synchronize_session=False)
@@ -16,7 +19,7 @@ def delete(id, db: Session = Depends(get_db)):
     return {'Product Deleted'}
 
 
-@router.put('/product/{id}', tags=['Product'])
+@router.put('/{id}')
 def update(id, request: Product, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id)
     if not product.first():
@@ -28,7 +31,7 @@ def update(id, request: Product, db: Session = Depends(get_db)):
 
 
 
-@router.post('/products', status_code=status.HTTP_201_CREATED, tags=['Product'])
+@router.post('/', status_code=status.HTTP_201_CREATED)
 def add(request: Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, description=request.description, price=request.price, seller_id=1)
@@ -39,7 +42,7 @@ def add(request: Product, db: Session = Depends(get_db)):
     db.refresh(new_product)
     return request
 
-@router.get('/product/{id}', response_model=DisplayProduct, tags=['Product'])
+@router.get('/{id}', response_model=DisplayProduct)
 def product(id, response: Response, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     if not product:
@@ -49,7 +52,7 @@ def product(id, response: Response, db: Session = Depends(get_db)):
     return product
 
 
-@router.get('/products', tags=['Product'])
+@router.get('/')
 def products(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
