@@ -5,11 +5,14 @@ from database import Base, engine, SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import mode
 from typing import List
+from passlib.context import CryptContext
 import models
 
 app = FastAPI()
 
 models.Base.metadata.create_all(engine)
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_db():
@@ -66,10 +69,12 @@ def add(request: Product, db: Session = Depends(get_db)):
     db.refresh(new_product)
     return request
 
-@app.post('/seller')
+@app.post('/seller', response_model= DisplaySeller)
 def add_seller(request:Seller, db: Session = Depends(get_db)):
+    hashed_pwd = pwd_context.hash(request.password)
+
     new_Seller = models.Seller(
-        username=request.name, email = request.email, password = request.password
+        username=request.name, email = request.email, password = hashed_pwd
     )
     db.add(new_Seller)
     db.commit()

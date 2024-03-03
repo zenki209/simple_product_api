@@ -23,3 +23,11 @@ class Seller(BaseModel):
     name: str
     email: str
     password: str
+
+#Dispaly seller
+class DisplaySeller(BaseModel):
+    name: str
+    email: str
+    
+    class Config:
+        from_attributes = True
