@@ -2,7 +2,7 @@
 
 ```
 Create the Virtual Env in python
-python3 -m virtualenv env
+    * python3 -m virtualenv env
 
 Active the Virtual Env
 #linux

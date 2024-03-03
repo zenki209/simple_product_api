@@ -8,7 +8,13 @@ from typing import List
 from passlib.context import CryptContext
 import models
 
-app = FastAPI()
+app = FastAPI(
+    title="Product API",
+    description="This is a sample Product API for Learning FASTAPI",
+    contact={
+        "Developer Name": "KHOA TRINH"
+    }
+)
 
 models.Base.metadata.create_all(engine)
 
