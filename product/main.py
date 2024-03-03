@@ -61,7 +61,7 @@ def product(id, response: Response, db: Session = Depends(get_db)):
 @app.post('/products', status_code=status.HTTP_201_CREATED)
 def add(request: Product, db: Session = Depends(get_db)):
     new_product = models.Product(
-        name=request.name, description=request.description, price=request.price)
+        name=request.name, description=request.description, price=request.price, seller_id=1)
     print(db)
     print(request.name)
     db.add(new_product)
@@ -69,12 +69,13 @@ def add(request: Product, db: Session = Depends(get_db)):
     db.refresh(new_product)
     return request
 
-@app.post('/seller', response_model= DisplaySeller)
-def add_seller(request:Seller, db: Session = Depends(get_db)):
+
+@app.post('/seller', response_model=DisplaySeller)
+def add_seller(request: Seller, db: Session = Depends(get_db)):
     hashed_pwd = pwd_context.hash(request.password)
 
     new_Seller = models.Seller(
-        username=request.name, email = request.email, password = hashed_pwd
+        username=request.name, email=request.email, password=hashed_pwd
     )
     db.add(new_Seller)
     db.commit()
