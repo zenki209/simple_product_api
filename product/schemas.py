@@ -14,13 +14,14 @@ class Seller(BaseModel):
     email: str
     password: str
 
-#Dispaly seller
+#Display seller
 class DisplaySeller(BaseModel):
     name: str
     email: str
     
     class Config:
         from_attributes = True
+
 #There are some case you did not want the response return all of the data so we have to build a class for the dispaly
 class DisplayProduct(BaseModel):
     name: str

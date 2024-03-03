@@ -11,13 +11,13 @@ class Product(Base):
     description = Column(String)
     price = Column(Integer)
     seller_id = Column(Integer, ForeignKey('sellers.id'))
-    seller = relationship("Seller", back_populates='product')
+    seller = relationship("Seller", back_populates='products')
 
-
+#SELLER DB MODEL
 class Seller(Base):
     __tablename__ = 'sellers'
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
     email = Column(String)
     password = Column(String)
-    product = relationship("Product", back_populates='seller')
+    products = relationship("Product", back_populates='seller')
