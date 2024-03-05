@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.functions import mode
 from typing import List
 from passlib.context import CryptContext
-from routers import product,seller
+from routers import product,seller,login
 import models
 
 app = FastAPI(
@@ -17,8 +17,10 @@ app = FastAPI(
     }
 )
 
+app.include_router(login.router)
 app.include_router(product.router)
 app.include_router(seller.router)
+
 
 models.Base.metadata.create_all(engine)
 
