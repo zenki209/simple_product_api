@@ -1,7 +1,7 @@
-#This is for pydantic model
+# This is for pydantic model
 
 from pydantic import BaseModel
-
+from typing import Optional
 
 class Product(BaseModel):
     name: str
@@ -14,24 +14,37 @@ class Seller(BaseModel):
     email: str
     password: str
 
-#Display seller
+# Display seller
+
+
 class DisplaySeller(BaseModel):
     name: str
     email: str
-    
+
     class Config:
         from_attributes = True
 
-#Login Base Model
+# Login Base Model
+
+
 class Login(BaseModel):
     username: str
     password: str
 
 
+# FOR JWT TOKEN
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
 
 
 
-#There are some case you did not want the response return all of the data so we have to build a class for the dispaly
+# There are some case you did not want the response return all of the data so we have to build a class for the dispaly
+
+
 class DisplayProduct(BaseModel):
     name: str
     description: str
@@ -39,7 +52,3 @@ class DisplayProduct(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-
-
