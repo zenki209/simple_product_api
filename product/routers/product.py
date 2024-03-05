@@ -5,6 +5,7 @@ import models
 from schemas import *
 from database import get_db
 from typing import List
+from routers import login
 
 router = APIRouter(
     tags=['product'],
@@ -53,7 +54,7 @@ def product(id, response: Response, db: Session = Depends(get_db)):
 
 
 @router.get('/')
-def products(db: Session = Depends(get_db)):
+def products(db: Session = Depends(get_db), current_login_user: Seller = Depends(login.get_current_user)):
     products = db.query(models.Product).all()
     return products
 

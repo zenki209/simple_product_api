@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
-
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from fastapi.security import OAuth2PasswordBearer
 
 # FOR JWT
@@ -33,11 +33,12 @@ def generate_token(data: dict):
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credetinals_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid USer"
-        headers={'WWW-Authenticate':"Bearer"}
+        detail="Invalid USer",
+        headers={'WWW-Authenticate': "Bearer"}
     )
     try:
-        payload = jwt.decode(token,SECRET_KEY= SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, key=SECRET_KEY ,
+                             algorithms=[ALGORITHM])
         username: str = payload.get('sub')
         if username is None:
             pass
@@ -45,8 +46,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credetinals_exception
 
+
 @router.post('/login')
-def login(request: schemas.Login, db: Session = Depends(get_db)):
+def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(models.Seller).filter(
         models.Seller.username == request.username).first()
     if not user:
