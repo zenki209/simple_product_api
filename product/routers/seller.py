@@ -1,12 +1,17 @@
 from fastapi import APIRouter, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from fastapi.params import Depends
+from passlib.context import CryptContext
 import models
 from schemas import *
 from database import get_db
 from typing import List
 
 router = APIRouter()
+
+#Password Context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 @router.post('/seller', response_model=DisplaySeller, tags=['Sellers'])
 def add_seller(request: Seller, db: Session = Depends(get_db)):
